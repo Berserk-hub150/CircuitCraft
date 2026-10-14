@@ -1,0 +1,2 @@
+   Compiling circuitcraft v0.2.0 (/workspace/scratch/927d296a70f4/circuitcraft/desktop)
+    Finished `dist` profile [optimized] target(s) in 2.19s

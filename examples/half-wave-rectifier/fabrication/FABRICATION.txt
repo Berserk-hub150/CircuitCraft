@@ -1,0 +1,5 @@
+CircuitCraft: 80.000 x 60.000 mm, 2 copper layers.
+Common origin, metric coordinates. Drill holes are plated.
+Mask expansion 0.1 mm. Top solder paste uses full SMD pad dimensions; adjust for your process. No assembly text.
+Geometric DRC issues: 0.
+Check physical footprint pin mapping, datasheets and layers in an independent CAM tool before fabrication.

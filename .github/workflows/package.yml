@@ -1,0 +1,29 @@
+name: Publish verified package
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - downloads/parts/**
+      - third-party/parts/**
+      - downloads/packages.json
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python scripts/assemble_packages.py
+      - name: Publish the complete verified downloads
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v0.2.0 \
+            downloads/CircuitCraft-0.2.0-Windows-x64.zip \
+            third-party/ngspice-win64.7z \
+            third-party/ngspice-47.tar.gz \
+            downloads/SHA256SUMS.txt \
+            --target "$GITHUB_SHA" \
+            --title "CircuitCraft 0.2.0" \
+            --notes-file docs/RELEASE_NOTES.md

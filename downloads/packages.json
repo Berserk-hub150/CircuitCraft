@@ -1,0 +1,76 @@
+{
+  "format": 1,
+  "packages": [
+    {
+      "path": "downloads/CircuitCraft-0.2.0-Windows-x64.zip",
+      "bytes": 41770836,
+      "sha256": "be3dae7d16913981be6ae903deb0723c6b1dfb7f6458ee647bae5e65c7cd6494",
+      "parts": [
+        {
+          "path": "downloads/parts/CircuitCraft-0.2.0-Windows-x64.zip.part001",
+          "bytes": 8000000,
+          "sha256": "13484dab7ef884ee8dea145f05d6d027e7f43457569a6267b9581160936cd85f"
+        },
+        {
+          "path": "downloads/parts/CircuitCraft-0.2.0-Windows-x64.zip.part002",
+          "bytes": 8000000,
+          "sha256": "81acc60eb46c5e1a57bec694ed467773264629a7dde61ab999da1f6b07fba826"
+        },
+        {
+          "path": "downloads/parts/CircuitCraft-0.2.0-Windows-x64.zip.part003",
+          "bytes": 8000000,
+          "sha256": "c3a5c23c85b94fcc35fe2663b12dc460a70d5c3e644f56e9db98ec3c84c99576"
+        },
+        {
+          "path": "downloads/parts/CircuitCraft-0.2.0-Windows-x64.zip.part004",
+          "bytes": 8000000,
+          "sha256": "9361bf2000585459921fc893361d3f6aadefbfc5988f534f380bde5c8ed3546f"
+        },
+        {
+          "path": "downloads/parts/CircuitCraft-0.2.0-Windows-x64.zip.part005",
+          "bytes": 8000000,
+          "sha256": "aedca5690713fb0f2f467ea00e8036838bd790720083d021f50a8d171870ee95"
+        },
+        {
+          "path": "downloads/parts/CircuitCraft-0.2.0-Windows-x64.zip.part006",
+          "bytes": 1770836,
+          "sha256": "a09d148b9b6315bd6cf45b9799b65fc70beebffad975ba907cf640bfe41e4a82"
+        }
+      ]
+    },
+    {
+      "path": "third-party/ngspice-win64.7z",
+      "bytes": 13814879,
+      "sha256": "59225971bd68cdd1199443649aa4615a9e6d684933f205ab49006a3942518f5a",
+      "parts": [
+        {
+          "path": "third-party/parts/ngspice-win64.7z.part001",
+          "bytes": 8000000,
+          "sha256": "ac7a017e8247b7fd8392b6732606fd0d2a44f57d068185045142624cfbf7dec7"
+        },
+        {
+          "path": "third-party/parts/ngspice-win64.7z.part002",
+          "bytes": 5814879,
+          "sha256": "3597f411ea7e1376ae76972b211707111a64b39b79a12cbd95f0ad392e3ad855"
+        }
+      ]
+    },
+    {
+      "path": "third-party/ngspice-47.tar.gz",
+      "bytes": 13105136,
+      "sha256": "894e649651f1838a14095e5a5439e7d3aa63e87ede14d283173fda4fcdef675f",
+      "parts": [
+        {
+          "path": "third-party/parts/ngspice-47.tar.gz.part001",
+          "bytes": 8000000,
+          "sha256": "7218a6d53a3e6d1837cec869995fb2e6303a44ee9ba13fbaf508ed4c1f89657b"
+        },
+        {
+          "path": "third-party/parts/ngspice-47.tar.gz.part002",
+          "bytes": 5105136,
+          "sha256": "c79a0fa92b62ecc697ca806f867fcb6755b20388917244830ab75f8a64e94a7f"
+        }
+      ]
+    }
+  ]
+}

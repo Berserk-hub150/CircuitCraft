@@ -1,0 +1,4 @@
+Reference,Footprint,X_mm,Y_mm,Rotation_deg,Side
+"V1","THT-2-5.08",20.000000,30.000000,0,Top
+"R1","Custom-SMD-2",40.000000,45.000000,0,Top
+"C1","THT-2-5.08",55.000000,25.000000,0,Top

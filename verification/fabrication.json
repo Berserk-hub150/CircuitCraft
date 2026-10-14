@@ -1,0 +1,58 @@
+[
+  {
+    "project": "custom-smd-rc.cforge",
+    "layers": {
+      "board-B_Mask.gbr": 4,
+      "board-F_SilkS.gbr": 12,
+      "board-F_Cu.gbr": 13,
+      "board-B_Cu.gbr": 4,
+      "board-F_Paste.gbr": 2,
+      "board-F_Mask.gbr": 6,
+      "board-Edge_Cuts.gbr": 4
+    },
+    "holes": 4,
+    "status": "PASS"
+  },
+  {
+    "project": "voltage-divider.cforge",
+    "layers": {
+      "board-B_Mask.gbr": 6,
+      "board-F_SilkS.gbr": 12,
+      "board-F_Cu.gbr": 11,
+      "board-B_Cu.gbr": 8,
+      "board-F_Paste.gbr": 0,
+      "board-F_Mask.gbr": 6,
+      "board-Edge_Cuts.gbr": 4
+    },
+    "holes": 6,
+    "status": "PASS"
+  },
+  {
+    "project": "half-wave-rectifier.cforge",
+    "layers": {
+      "board-B_Mask.gbr": 8,
+      "board-F_SilkS.gbr": 16,
+      "board-F_Cu.gbr": 15,
+      "board-B_Cu.gbr": 12,
+      "board-F_Paste.gbr": 0,
+      "board-F_Mask.gbr": 8,
+      "board-Edge_Cuts.gbr": 4
+    },
+    "holes": 8,
+    "status": "PASS"
+  },
+  {
+    "project": "rc-lowpass.cforge",
+    "layers": {
+      "board-B_Mask.gbr": 6,
+      "board-F_SilkS.gbr": 12,
+      "board-F_Cu.gbr": 11,
+      "board-B_Cu.gbr": 8,
+      "board-F_Paste.gbr": 0,
+      "board-F_Mask.gbr": 6,
+      "board-Edge_Cuts.gbr": 4
+    },
+    "holes": 6,
+    "status": "PASS"
+  }
+]

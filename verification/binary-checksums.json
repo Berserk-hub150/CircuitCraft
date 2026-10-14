@@ -1,0 +1,44 @@
+[
+  {
+    "path": "windows/circuitcraft-cli.exe",
+    "bytes": 1649152,
+    "sha256": "d389e8a6dd042e0a9cc168edd6f174e3e45b70bb06cea2671f4702e2e88cc278",
+    "machine": "AMD64"
+  },
+  {
+    "path": "windows/circuitcraft.exe",
+    "bytes": 11879936,
+    "sha256": "6f4bddea77ed20e67a280ddd3a6a2ee0e1f9523aecb9252aea02a62a59b5cd02",
+    "machine": "AMD64"
+  },
+  {
+    "path": "windows/ngspice/Spice64/bin/ngspice_con.exe",
+    "bytes": 7641600,
+    "sha256": "22d5cae2bd32b2e39157a8d27bf457122f68285b72a9ebefdf41551b628233ab",
+    "machine": "AMD64"
+  },
+  {
+    "path": "windows/ngspice/Spice64/bin/ngspice.exe",
+    "bytes": 8585216,
+    "sha256": "fa4f083058c1799d9f6da7ae2a99e3034b7bb92d056095de7d2df59e6f627d49",
+    "machine": "AMD64"
+  },
+  {
+    "path": "windows/ngspice/Spice64/bin/samplerate.dll",
+    "bytes": 1592320,
+    "sha256": "2e24802f94b584173de7358a5f26d3147226f417dcebeb69bee98994022483ce",
+    "machine": "AMD64"
+  },
+  {
+    "path": "windows/ngspice/Spice64/bin/sndfile.dll",
+    "bytes": 2603520,
+    "sha256": "4e3bd2de8e1485110eaebef8e1239471f73d608773831c323bf528e05645655e",
+    "machine": "AMD64"
+  },
+  {
+    "path": "windows/ngspice/Spice64/bin/libomp140.x86_64.dll",
+    "bytes": 698784,
+    "sha256": "644c49149f8a5d9275a83e9331a0adbd14620f930190e985d30b842107123597",
+    "machine": "AMD64"
+  }
+]

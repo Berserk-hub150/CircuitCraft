@@ -1,0 +1,254 @@
+{
+  "format_version": 1,
+  "title": "Voltage divider · 10 V to 5 V",
+  "components": [
+    {
+      "id": 1,
+      "kind": "Voltage",
+      "reference": "V1",
+      "value": "DC 10 AC 1",
+      "at": {
+        "x": 0,
+        "y": 0
+      },
+      "rotation": 0,
+      "params": "",
+      "footprint": "THT-2-5.08",
+      "custom_pads": []
+    },
+    {
+      "id": 2,
+      "kind": "Resistor",
+      "reference": "R1",
+      "value": "1k",
+      "at": {
+        "x": 6,
+        "y": -2
+      },
+      "rotation": 0,
+      "params": "",
+      "footprint": "THT-2-5.08",
+      "custom_pads": []
+    },
+    {
+      "id": 3,
+      "kind": "Resistor",
+      "reference": "R2",
+      "value": "1k",
+      "at": {
+        "x": 8,
+        "y": 3
+      },
+      "rotation": 1,
+      "params": "",
+      "footprint": "THT-2-5.08",
+      "custom_pads": []
+    }
+  ],
+  "wires": [
+    {
+      "id": 4,
+      "points": [
+        {
+          "x": 0,
+          "y": -2
+        },
+        {
+          "x": 4,
+          "y": -2
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "points": [
+        {
+          "x": 8,
+          "y": -2
+        },
+        {
+          "x": 8,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "points": [
+        {
+          "x": 8,
+          "y": 5
+        },
+        {
+          "x": 0,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "points": [
+        {
+          "x": 0,
+          "y": 5
+        },
+        {
+          "x": 0,
+          "y": 2
+        }
+      ]
+    }
+  ],
+  "grounds": [
+    {
+      "x": 0,
+      "y": 5
+    }
+  ],
+  "junctions": [],
+  "labels": [
+    {
+      "id": 8,
+      "at": {
+        "x": 0,
+        "y": -2
+      },
+      "name": "VIN"
+    },
+    {
+      "id": 9,
+      "at": {
+        "x": 8,
+        "y": -2
+      },
+      "name": "VOUT"
+    }
+  ],
+  "spice_models": "",
+  "raw_netlist": "",
+  "raw_mode": false,
+  "include_directory": "",
+  "notes": "10 V source and two 1 kΩ resistors. Expected VOUT = 5 V. PCB pin numbers follow SPICE terminal order; verify against the actual component datasheet.",
+  "board": {
+    "width": 80.0,
+    "height": 60.0,
+    "clearance": 0.25,
+    "edge_clearance": 0.5,
+    "min_track": 0.2,
+    "footprints": [
+      {
+        "component_id": 1,
+        "reference": "V1",
+        "style": "THT-2-5.08",
+        "at": {
+          "x": 20.0,
+          "y": 30.0
+        },
+        "rotation": 0,
+        "nets": [
+          "VIN",
+          "0"
+        ],
+        "custom_pads": []
+      },
+      {
+        "component_id": 2,
+        "reference": "R1",
+        "style": "THT-2-5.08",
+        "at": {
+          "x": 40.0,
+          "y": 45.0
+        },
+        "rotation": 0,
+        "nets": [
+          "VIN",
+          "VOUT"
+        ],
+        "custom_pads": []
+      },
+      {
+        "component_id": 3,
+        "reference": "R2",
+        "style": "THT-2-5.08",
+        "at": {
+          "x": 55.0,
+          "y": 25.0
+        },
+        "rotation": 0,
+        "nets": [
+          "VOUT",
+          "0"
+        ],
+        "custom_pads": []
+      }
+    ],
+    "tracks": [
+      {
+        "id": 10,
+        "net": "VIN",
+        "layer": "Top",
+        "width": 0.4,
+        "points": [
+          {
+            "x": 17.46,
+            "y": 30.0
+          },
+          {
+            "x": 17.46,
+            "y": 45.0
+          },
+          {
+            "x": 37.46,
+            "y": 45.0
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "net": "VOUT",
+        "layer": "Bottom",
+        "width": 0.4,
+        "points": [
+          {
+            "x": 42.54,
+            "y": 45.0
+          },
+          {
+            "x": 52.46,
+            "y": 45.0
+          },
+          {
+            "x": 52.46,
+            "y": 25.0
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "net": "0",
+        "layer": "Top",
+        "width": 0.6,
+        "points": [
+          {
+            "x": 22.54,
+            "y": 30.0
+          },
+          {
+            "x": 22.54,
+            "y": 10.0
+          },
+          {
+            "x": 57.54,
+            "y": 10.0
+          },
+          {
+            "x": 57.54,
+            "y": 25.0
+          }
+        ]
+      }
+    ],
+    "vias": []
+  },
+  "next_id": 13
+}

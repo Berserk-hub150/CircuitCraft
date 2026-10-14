@@ -1,0 +1,29 @@
+{
+  "name": "Custom-SMD-2",
+  "pads": [
+    {
+      "at": {
+        "x": -2.0,
+        "y": 0.0
+      },
+      "size": {
+        "x": 1.2,
+        "y": 1.8
+      },
+      "rectangular": true,
+      "drill": 0.0
+    },
+    {
+      "at": {
+        "x": 2.0,
+        "y": 0.0
+      },
+      "size": {
+        "x": 1.2,
+        "y": 1.8
+      },
+      "rectangular": true,
+      "drill": 0.0
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+Signal,Measurement,Value,Unit
+"inoise_spectrum","Minimum",4.071371529487e-9,"V/√Hz"
+"inoise_spectrum","Maximum",4.071371529487e-9,"V/√Hz"
+"inoise_spectrum","Peak to peak",1.654361225106e-24,"V/√Hz"
+"inoise_spectrum","Integrated noise over sampled band",1.287474285975e-6,"V RMS"
+"inoise_spectrum","Sample mean",4.071371529487e-9,"V/√Hz"
+"inoise_spectrum","Sample RMS",4.071371529487e-9,"V/√Hz"
+"onoise_spectrum","Minimum",6.479780834082e-12,"V/√Hz"
+"onoise_spectrum","Maximum",4.071291166214e-9,"V/√Hz"
+"onoise_spectrum","Peak to peak",4.064811385380e-9,"V/√Hz"
+"onoise_spectrum","Integrated noise over sampled band",6.421425116666e-8,"V RMS"
+"onoise_spectrum","Sample mean",2.037450059852e-9,"V/√Hz"
+"onoise_spectrum","Sample RMS",2.702129210849e-9,"V/√Hz"

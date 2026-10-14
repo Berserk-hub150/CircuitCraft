@@ -1,0 +1,17 @@
+CircuitCraft - Voltage divider · 10 V to 5 V
+* Generated from electrical connectivity
+V1 VIN 0 DC 10 AC 1 
+R1 VIN VOUT 1k 
+R2 VOUT 0 1k 
+
+* Generic demonstration models; replace with vendor models for design
+.model DGEN D(IS=2.52n RS=0.568 N=1.73 CJO=4p BV=100 IBV=100u)
+.model DLED D(IS=1e-20 N=2 RS=10)
+.model QGEN NPN(IS=1e-14 BF=150 VAF=100)
+.model QPGEN PNP(IS=1e-14 BF=100 VAF=100)
+.model NGEN NMOS(LEVEL=1 VTO=2 KP=2m LAMBDA=0.02)
+.model PGEN PMOS(LEVEL=1 VTO=-2 KP=1m LAMBDA=0.02)
+.model SWGEN SW(RON=1 ROFF=1e9 VT=2.5 VH=0.1)
+
+
+.end

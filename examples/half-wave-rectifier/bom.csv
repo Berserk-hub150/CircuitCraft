@@ -1,0 +1,5 @@
+Reference,Type,Value,Footprint
+"V1","Voltage source","DC 0 SIN(0 10 50)","THT-2-5.08"
+"D1","Diode","DGEN","THT-2-5.08"
+"R2","Resistor","1k","THT-2-5.08"
+"C1","Capacitor","100u","THT-2-5.08"

@@ -1,0 +1,4 @@
+Reference,Type,Value,Footprint
+"V1","Voltage source","DC 10 AC 1","THT-2-5.08"
+"R1","Resistor","1k","THT-2-5.08"
+"R2","Resistor","1k","THT-2-5.08"

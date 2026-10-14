@@ -1,0 +1,14 @@
+[workspace]
+members = ["core", "desktop", "cli"]
+resolver = "2"
+[workspace.package]
+version = "0.2.0"
+edition = "2021"
+license = "MIT"
+authors = ["Luca Magrini"]
+[profile.dist]
+inherits = "release"
+opt-level = 1
+lto = false
+codegen-units = 16
+strip = true

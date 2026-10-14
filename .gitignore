@@ -1,0 +1,11 @@
+/target/
+/windows/*.exe
+/windows/ngspice/
+/third-party/rust-licenses/
+*.ppm
+__pycache__/
+*.tmp
+/downloads/CircuitCraft-0.2.0-Windows-x64.zip
+/third-party/ngspice-win64.7z
+/third-party/ngspice-47.tar.gz
+*.assembling
