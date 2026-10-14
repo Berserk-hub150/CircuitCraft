@@ -292,7 +292,7 @@ dependencies = [
 
 [[package]]
 name = "circuitcraft"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "circuitcraft-core",
  "eframe",
@@ -301,14 +301,14 @@ dependencies = [
 
 [[package]]
 name = "circuitcraft-cli"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "circuitcraft-core",
 ]
 
 [[package]]
 name = "circuitcraft-core"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "serde",
  "serde_json",

@@ -1,0 +1,47 @@
+name: Release CircuitCraft 0.3 Windows
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [docs/RELEASE_NOTES_0.3.0.md]
+permissions:
+  contents: write
+concurrency:
+  group: circuitcraft-0.3-release
+  cancel-in-progress: false
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: cargo fmt --all --check
+      - run: cargo test --workspace
+      - run: python -m pip install py7zr
+      - run: python scripts/prepare_engine.py
+      - run: python scripts/assemble_packages.py --only third-party/ngspice-47.tar.gz
+      - run: .\scripts\Build-Windows.ps1
+      - run: .\scripts\Test-Windows-Engine.ps1
+      - run: python scripts/package_engineering.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CircuitCraft-0.3.0-Windows-x64
+          path: |
+            downloads/CircuitCraft-0.3.0-Windows-x64.zip
+            downloads/SHA256SUMS-0.3.0.txt
+            verification/windows-engine-report.txt
+      - name: Publish tested Windows package
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          gh release create v0.3.0
+          downloads/CircuitCraft-0.3.0-Windows-x64.zip
+          downloads/SHA256SUMS-0.3.0.txt
+          --target "$env:GITHUB_SHA"
+          --title "CircuitCraft 0.3.0 — routing, hierarchy and PCB 3D"
+          --notes-file docs/RELEASE_NOTES_0.3.0.md

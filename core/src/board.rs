@@ -1,6 +1,11 @@
 use crate::{connect, valid_node, Sheet};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
+mod router;
+pub use router::*;
+fn default_thickness() -> f64 {
+    1.6
+}
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub struct Mm {
     pub x: f64,
@@ -110,6 +115,8 @@ pub struct Via {
 pub struct Board {
     pub width: f64,
     pub height: f64,
+    #[serde(default = "default_thickness")]
+    pub thickness: f64,
     pub clearance: f64,
     pub edge_clearance: f64,
     pub min_track: f64,
@@ -122,6 +129,7 @@ impl Default for Board {
         Self {
             width: 80.,
             height: 60.,
+            thickness: default_thickness(),
             clearance: 0.25,
             edge_clearance: 0.5,
             min_track: 0.2,
@@ -261,6 +269,9 @@ impl Board {
         let pos =
             |p: Mm| p.x.is_finite() && p.y.is_finite() && p.x.abs() < 10000. && p.y.abs() < 10000.;
         if !self.width.is_finite()
+            || !self.thickness.is_finite()
+            || self.thickness < 0.2
+            || self.thickness > 10.
             || !self.height.is_finite()
             || self.width < 5.
             || self.height < 5.
@@ -689,6 +700,19 @@ impl Board {
 }
 impl Sheet {
     pub fn pcb_drc(&self) -> Vec<PcbIssue> {
+        if !self.children.is_empty() {
+            return match crate::flatten(self) {
+                Ok(mut flat) => {
+                    flat.board = self.board.clone();
+                    flat.pcb_drc()
+                }
+                Err(message) => vec![PcbIssue {
+                    error: true,
+                    message,
+                    at: None,
+                }],
+            };
+        }
         let mut out = self.board.drc();
         let n = connect(self);
         let issue = |message: String, at: Option<Mm>| PcbIssue {

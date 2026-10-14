@@ -1,0 +1,4 @@
+Reference,Footprint,X_mm,Y_mm,Rotation_deg,Side
+"V1","THT-2-5.08",15.000000,15.000000,0,Top
+"R1","THT-2-5.08",27.000000,15.000000,0,Top
+"R_LOAD_R1","THT-2-5.08",39.000000,15.000000,0,Top

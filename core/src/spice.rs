@@ -54,6 +54,9 @@ pub fn parse_value(s: &str) -> Result<f64, String> {
     Ok(value)
 }
 pub fn netlist(s: &Sheet) -> Result<String, String> {
+    if !s.children.is_empty() {
+        return netlist(&crate::flatten(s)?);
+    }
     let n = connect(s);
     let errors = n
         .issues
@@ -541,6 +544,9 @@ fn source_dc(s: &str) -> Result<f64, String> {
     }
 }
 pub fn linear_dc(s: &Sheet) -> Result<Simulation, String> {
+    if !s.children.is_empty() {
+        return linear_dc(&crate::flatten(s)?);
+    }
     let n = connect(s);
     if let Some(e) = n.issues.iter().find(|i| i.error) {
         return Err(e.message.clone());

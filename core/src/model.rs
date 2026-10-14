@@ -213,12 +213,14 @@ pub struct Sheet {
     pub include_directory: String,
     pub notes: String,
     pub board: Board,
+    #[serde(default)]
+    pub children: Vec<crate::ChildSheet>,
     next_id: u64,
 }
 impl Default for Sheet {
     fn default() -> Self {
         Self {
-            format_version: 1,
+            format_version: 2,
             title: "Untitled circuit".into(),
             components: vec![],
             wires: vec![],
@@ -231,6 +233,7 @@ impl Default for Sheet {
             include_directory: String::new(),
             notes: String::new(),
             board: Board::default(),
+            children: vec![],
             next_id: 1,
         }
     }
@@ -288,9 +291,12 @@ impl Sheet {
     }
     pub fn from_json(text: &str) -> Result<Self, String> {
         let mut s: Self = serde_json::from_str(text).map_err(|e| e.to_string())?;
-        if s.format_version != 1 {
+        if !matches!(s.format_version, 1 | 2) {
             return Err("Unsupported project format.".into());
         }
+        // Old projects migrate on open. Version 2 prevents older applications
+        // silently ignoring the hierarchy and losing child pages on save.
+        s.format_version = 2;
         if s.components.len() > 10000 || s.wires.len() > 30000 {
             return Err("Project exceeds 10,000 components / 30,000 wires.".into());
         }
@@ -342,13 +348,42 @@ impl Sheet {
             }
         }
         s.board.validate()?;
-        s.next_id = ids.into_iter().max().unwrap_or(0) + 1;
+        s.next_id = ids
+            .into_iter()
+            .max()
+            .unwrap_or(0)
+            .checked_add(1)
+            .ok_or("Identifier space exhausted")?;
+        crate::validate_hierarchy(&s)?;
+        for child in &mut s.children {
+            child.sheet = Box::new(Self::from_json(&child.sheet.to_json()?)?);
+        }
         Ok(s)
     }
-    pub fn sync_board(&mut self) {
+    pub fn try_sync_board(&mut self) -> Result<(), String> {
+        let flat = crate::flatten(self)?;
         let mut b = self.board.clone();
-        b.sync(self);
+        b.sync(&flat);
         self.board = b;
+        Ok(())
+    }
+    pub fn sync_board(&mut self) {
+        self.try_sync_board().expect("valid schematic for PCB sync");
+    }
+    pub fn autoroute(
+        &mut self,
+        options: &crate::RouteOptions,
+    ) -> Result<crate::RouteReport, String> {
+        self.autoroute_cancel(options, &std::sync::atomic::AtomicBool::new(false))
+    }
+    pub fn autoroute_cancel(
+        &mut self,
+        options: &crate::RouteOptions,
+        cancel: &std::sync::atomic::AtomicBool,
+    ) -> Result<crate::RouteReport, String> {
+        let report = self.board.autoroute_cancel(options, self.next_id, cancel)?;
+        self.next_id = report.next_id;
+        Ok(report)
     }
     fn demo_board(&mut self) {
         self.sync_board();

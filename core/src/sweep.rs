@@ -131,6 +131,17 @@ pub fn run_sweep(
     base: Option<&Path>,
     cancel: Arc<AtomicBool>,
 ) -> Result<SweepResult, String> {
+    if !sheet.children.is_empty() {
+        return run_sweep(
+            &crate::flatten(sheet)?,
+            reference,
+            values,
+            analysis,
+            engine,
+            base,
+            cancel,
+        );
+    }
     if sheet.raw_mode {
         return Err(
             "Component sweeps use the graphical schematic. Disable edited-netlist mode.".into(),

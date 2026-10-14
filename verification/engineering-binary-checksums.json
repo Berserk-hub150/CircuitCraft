@@ -1,0 +1,14 @@
+{
+  "windows/circuitcraft.exe": {
+    "sha256": "4ae080ee1232e7e5f7cc2f27998d6ef9f1181e08b9360ce435d4ccaee33ea08b",
+    "bytes": 16345207
+  },
+  "windows/circuitcraft-cli.exe": {
+    "sha256": "3e6096acbab0e8d8de8cd9cd35050b3a3c01bedb2bb6ab1884872f6f4042af5d",
+    "bytes": 3426997
+  },
+  "downloads/CircuitCraft-0.3.0-Windows-x64.zip": {
+    "sha256": "e787c15789a117edbcca031fa3004d92376e4f2988da886258589e90ead9775a",
+    "bytes": 56304589
+  }
+}

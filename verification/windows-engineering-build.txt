@@ -1,0 +1,117 @@
+   Compiling zerofrom v0.1.8
+   Compiling stable_deref_trait v1.2.1
+   Compiling yoke v0.8.3
+   Compiling zerovec v0.11.8
+   Compiling cfg-if v1.0.5
+   Compiling smallvec v1.16.3
+   Compiling tinystr v0.8.4
+   Compiling writeable v0.6.4
+   Compiling litemap v0.8.3
+   Compiling windows-link v0.2.1
+   Compiling bitflags v2.13.2
+   Compiling icu_locale_core v2.3.0
+   Compiling bytemuck v1.25.2
+   Compiling windows_x86_64_gnu v0.52.6
+   Compiling zerotrie v0.2.5
+   Compiling potential_utf v0.1.6
+   Compiling utf8_iter v1.0.4
+   Compiling simd-adler32 v0.3.10
+   Compiling icu_collections v2.3.0
+   Compiling icu_provider v2.3.1
+   Compiling windows-targets v0.52.6
+   Compiling adler2 v2.0.1
+   Compiling once_cell v1.21.4
+   Compiling icu_properties_data v2.3.0
+   Compiling icu_normalizer_data v2.3.0
+   Compiling ttf-parser v0.25.1
+   Compiling scopeguard v1.2.0
+   Compiling log v0.4.34
+   Compiling lock_api v0.4.14
+   Compiling owned_ttf_parser v0.25.1
+   Compiling icu_normalizer v2.3.0
+   Compiling icu_properties v2.3.0
+   Compiling parking_lot_core v0.9.12
+   Compiling zerocopy v0.8.63
+   Compiling crc32fast v1.5.2
+   Compiling miniz_oxide v0.9.1
+   Compiling windows-sys v0.52.0
+   Compiling emath v0.31.1
+   Compiling ab_glyph_rasterizer v0.1.10
+   Compiling ab_glyph v0.2.32
+   Compiling ecolor v0.31.1
+   Compiling flate2 v1.1.10
+   Compiling ahash v0.8.12
+   Compiling parking_lot v0.12.5
+   Compiling idna_adapter v1.2.2
+   Compiling num-traits v0.2.19
+   Compiling windows_x86_64_gnu v0.53.1
+   Compiling miniz_oxide v0.8.9
+   Compiling fdeflate v0.3.7
+   Compiling pin-project-lite v0.2.17
+   Compiling pxfm v0.1.30
+   Compiling nohash-hasher v0.2.0
+   Compiling profiling v1.0.18
+   Compiling raw-window-handle v0.6.2
+   Compiling epaint_default_fonts v0.31.1
+   Compiling tracing-core v0.1.36
+   Compiling percent-encoding v2.3.2
+   Compiling form_urlencoded v1.2.2
+   Compiling tracing v0.1.44
+   Compiling epaint v0.31.1
+   Compiling moxcms v0.8.1
+   Compiling png v0.18.1
+   Compiling windows-targets v0.53.5
+   Compiling idna v1.1.0
+   Compiling serde_core v1.0.229
+   Compiling byteorder-lite v0.1.0
+   Compiling error-code v3.4.0
+   Compiling dpi v0.1.2
+   Compiling unicode-segmentation v1.13.3
+   Compiling cursor-icon v1.2.0
+   Compiling smol_str v0.2.2
+   Compiling winit v0.30.13
+   Compiling clipboard-win v5.4.1
+   Compiling image v0.25.10
+   Compiling url v2.5.8
+   Compiling windows-sys v0.60.2
+   Compiling glutin_egl_sys v0.7.1
+   Compiling glutin_wgl_sys v0.6.1
+   Compiling zmij v1.0.23
+   Compiling egui v0.31.1
+   Compiling libloading v0.8.9
+   Compiling glutin-winit v0.5.0
+   Compiling serde_derive v1.0.229
+   Compiling winapi v0.3.9
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.18
+   Compiling serde_json v1.0.154
+   Compiling serde v1.0.229
+   Compiling glutin v0.32.3
+   Compiling arboard v3.6.1
+   Compiling webbrowser v1.2.4
+   Compiling memoffset v0.9.1
+   Compiling winapi-x86_64-pc-windows-gnu v0.4.0
+   Compiling glow v0.16.0
+   Compiling litrs v1.0.1
+   Compiling web-time v1.1.0
+   Compiling egui-winit v0.31.1
+   Compiling document-features v0.2.12
+   Compiling egui_glow v0.31.1
+   Compiling circuitcraft-core v0.3.0 (/workspace/scratch/84c2379ad928/CircuitCraft/core)
+   Compiling windows-sys v0.59.0
+   Compiling static_assertions v1.1.0
+   Compiling eframe v0.31.1
+   Compiling circuitcraft v0.3.0 (/workspace/scratch/84c2379ad928/CircuitCraft/desktop)
+warning: method `router_running` is never used
+  --> desktop/src/engineering.rs:35:19
+   |
+34 | impl App {
+   | -------- method in this implementation
+35 |     pub(super) fn router_running(&self) -> bool {
+   |                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` on by default
+
+warning: `circuitcraft` (bin "circuitcraft") generated 1 warning
+   Compiling circuitcraft-cli v0.3.0 (/workspace/scratch/84c2379ad928/CircuitCraft/cli)
+    Finished `dist` profile [optimized] target(s) in 1m 51s

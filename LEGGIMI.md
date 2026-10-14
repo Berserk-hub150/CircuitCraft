@@ -31,7 +31,7 @@
 - Le impostazioni di analisi appartengono alla sessione; geometria, modelli, netlist, percorso degli include e note sono salvati.
 
 Il pacchetto Windows include ngspice 47 e i sorgenti Rust: puoi lavorare offline.
-È una prima versione con una libreria limitata. Restano da sviluppare autorouting, copper pour, gerarchia multischema, PCB 3D, importazione nativa KiCad/Altium e simulazione di microcontrollori.
+È una prima versione con una libreria limitata. Restano da sviluppare copper pour, push/shove, modelli 3D del produttore/STEP, importazione nativa KiCad/Altium e simulazione di microcontrollori. Autorouter, pagine gerarchiche e vista PCB 3D sono implementati nella versione 0.3 con i limiti documentati.
 
 Per verificare automaticamente il motore sul tuo Windows:
 ```powershell
@@ -45,3 +45,9 @@ Per verificare automaticamente il motore sul tuo Windows:
 - **Custom footprint / pad editor**: seleziona un componente nello schema e modifica i pad; poi sincronizza il PCB.
 - Il menu File esporta misure, sweep, coordinate di piazzamento e SVG PCB.
 - Le istruzioni dettagliate e le definizioni delle misure sono in `docs/ADVANCED_FEATURES.md`.
+
+## Novità 0.3
+- **PCB layout → Route unrouted connections**: autorouter su due strati, con vias opzionali. Prima sincronizza e correggi gli errori DRC. **Cancel router** annulla; **Ctrl+Z** ripristina il routing precedente.
+- **Examples → Hierarchical divider**: esempio multischema. In **HIERARCHICAL PAGES** crea/importa pagine, apri i figli e collega le etichette tramite **Add port binding** nel padre. Salvataggio e simulazione includono tutto il progetto.
+- **PCB 3D**: trascina per ruotare, rotella per zoom, pulsante centrale per spostare. **Top / Bottom / Isometric** cambiano vista. **Export 3D OBJ** esporta la geometria in millimetri. I corpi dei componenti sono approssimati.
+- Dettagli in `docs/ENGINEERING_WORKFLOWS.md`. Le aggiunte richiedono il pacchetto 0.3; il vecchio ZIP 0.2 non le contiene.

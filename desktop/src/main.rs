@@ -1,6 +1,7 @@
 #![cfg_attr(target_os = "windows", windows_subsystem = "windows")]
 mod advanced;
 mod drawing;
+mod engineering;
 mod files;
 mod plot;
 use advanced::{component_footprint, JobOutput};
@@ -27,6 +28,7 @@ const RED: Color32 = Color32::from_rgb(255, 112, 130);
 enum Tab {
     Schematic,
     Pcb,
+    Pcb3d,
     Simulation,
     Spice,
     Bom,
@@ -71,6 +73,8 @@ enum FileAction {
     BoardSVG,
     ImportFootprint,
     ExportFootprint,
+    ImportSheet,
+    BoardOBJ,
 }
 impl FileAction {
     fn title(self) -> &'static str {
@@ -86,6 +90,8 @@ impl FileAction {
             Self::Placement => "Footprint placement",
             Self::BoardSVG => "PCB review drawing",
             Self::ImportFootprint | Self::ExportFootprint => "Custom footprint",
+            Self::ImportSheet => "Import hierarchical page",
+            Self::BoardOBJ => "PCB 3D review mesh",
         }
     }
     fn ext(self) -> &'static str {
@@ -98,10 +104,15 @@ impl FileAction {
             Self::Measurements | Self::SweepCSV | Self::Placement => "csv",
             Self::BoardSVG => "svg",
             Self::ImportFootprint | Self::ExportFootprint => "json",
+            Self::ImportSheet => "cforge",
+            Self::BoardOBJ => "obj",
         }
     }
     fn save(self) -> bool {
-        !matches!(self, Self::Open | Self::Import | Self::ImportFootprint)
+        !matches!(
+            self,
+            Self::Open | Self::Import | Self::ImportFootprint | Self::ImportSheet
+        )
     }
 }
 #[derive(Clone)]
@@ -128,6 +139,8 @@ impl Camera {
 }
 struct App {
     sheet: Sheet,
+    parents: Vec<(Sheet, usize)>,
+    engineering: engineering::Engineering,
     history: History,
     path: Option<PathBuf>,
     dirty: bool,
@@ -197,6 +210,8 @@ impl Default for App {
     fn default() -> Self {
         Self {
             sheet: Sheet::rc(),
+            parents: vec![],
+            engineering: engineering::Engineering::default(),
             history: History::default(),
             path: None,
             dirty: false,
@@ -274,17 +289,18 @@ impl App {
         self.result = None;
         self.sweep = None;
         self.cancel.store(true, Ordering::Relaxed);
+        self.cancel_router();
         self.cursor_index = None;
         self.probe = None;
     }
     fn checkpoint(&mut self) {
-        self.history.record(&self.sheet);
+        self.history.record(&self.project());
         self.dirty = true;
         self.drc_stale = true;
         self.invalidate();
     }
     fn changed(&mut self, before: &Sheet) {
-        self.history.record(before);
+        self.history.record(&self.project_with(before));
         self.dirty = true;
         self.drc_stale = true;
         self.invalidate();
@@ -312,6 +328,7 @@ impl App {
         self.pcb_drag_offset = None;
     }
     fn replace(&mut self, s: Sheet) {
+        self.root_page();
         self.checkpoint();
         self.sheet = s;
         self.path = None;
@@ -386,10 +403,11 @@ impl App {
         }
     }
     fn body(&self) -> Result<String, String> {
-        if self.sheet.raw_mode {
-            Ok(self.sheet.raw_netlist.clone())
+        let project = self.project();
+        if project.raw_mode {
+            Ok(project.raw_netlist.clone())
         } else {
-            netlist(&self.sheet)
+            netlist(&project)
         }
     }
     fn analysis(&self) -> Result<Analysis, String> {
@@ -421,6 +439,7 @@ impl App {
         })
     }
     fn run(&mut self, builtin: bool) {
+        self.root_page();
         if self.job.is_some() {
             return;
         }
@@ -590,9 +609,18 @@ impl App {
         }
     }
     fn file_do(&mut self, a: FileAction, p: &Path) {
+        if matches!(
+            a,
+            FileAction::Fabrication
+                | FileAction::BoardSVG
+                | FileAction::Placement
+                | FileAction::BoardOBJ
+        ) {
+            self.root_page();
+        }
         let r: Result<String, String> = (|| match a {
             FileAction::Save | FileAction::SaveAs => {
-                fs::write(p, self.sheet.to_json()?).map_err(|e| e.to_string())?;
+                fs::write(p, self.project().to_json()?).map_err(|e| e.to_string())?;
                 self.path = Some(fs::canonicalize(p).unwrap_or_else(|_| p.to_path_buf()));
                 self.dirty = false;
                 Ok(format!("Saved {}", p.display()))
@@ -603,6 +631,18 @@ impl App {
                 self.path = Some(fs::canonicalize(p).unwrap_or_else(|_| p.to_path_buf()));
                 self.dirty = false;
                 Ok(format!("Opened {}", p.display()))
+            }
+            FileAction::ImportSheet => {
+                let page = Sheet::from_json(&fs::read_to_string(p).map_err(|e| e.to_string())?)?;
+                self.add_page(page);
+                Ok(
+                    "Hierarchical page import processed; add port bindings in the parent page."
+                        .into(),
+                )
+            }
+            FileAction::BoardOBJ => {
+                fs::write(p, self.sheet.board.mesh(true)?.obj()).map_err(|e| e.to_string())?;
+                Ok("PCB 3D mesh exported in millimetres.".into())
             }
             FileAction::Import => {
                 let text = fs::read_to_string(p).map_err(|e| e.to_string())?;
@@ -632,7 +672,7 @@ impl App {
                 Ok("SVG exported.".into())
             }
             FileAction::Bom => {
-                fs::write(p, bom_csv(&self.sheet)).map_err(|e| e.to_string())?;
+                fs::write(p, bom_csv(&flatten(&self.project())?)).map_err(|e| e.to_string())?;
                 Ok("BOM exported.".into())
             }
             FileAction::CSV => {
@@ -742,9 +782,9 @@ impl App {
         }
         if ctx.input(|i| i.modifiers.command && i.key_pressed(Key::Z)) {
             let ok = if ctx.input(|i| i.modifiers.shift) {
-                self.history.redo(&mut self.sheet)
+                self.redo_project()
             } else {
-                self.history.undo(&mut self.sheet)
+                self.undo_project()
             };
             if ok {
                 self.dirty = true;
@@ -753,7 +793,7 @@ impl App {
             }
         }
         if ctx.input(|i| i.modifiers.command && i.key_pressed(Key::Y)) {
-            if self.history.redo(&mut self.sheet) {
+            if self.redo_project() {
                 self.dirty = true;
                 self.drc_stale = true;
                 self.invalidate();
@@ -855,6 +895,7 @@ impl App {
                             (FileAction::SweepCSV, "Export full sweep CSV…"),
                             (FileAction::Placement, "Export placement CSV…"),
                             (FileAction::BoardSVG, "Export PCB SVG…"),
+                            (FileAction::BoardOBJ, "Export PCB 3D OBJ…"),
                             (
                                 FileAction::ImportFootprint,
                                 "Import footprint for selected part…",
@@ -868,6 +909,11 @@ impl App {
                         }
                     });
                     ui.menu_button("Examples", |ui| {
+                        if ui.button("Hierarchical divider").clicked() {
+                            self.replace(hierarchical_divider());
+                            self.analysis = 0;
+                            ui.close_menu();
+                        }
                         if ui.button("Voltage divider").clicked() {
                             self.replace(Sheet::divider());
                             self.analysis = 0;
@@ -888,7 +934,7 @@ impl App {
                     });
                     ui.menu_button("Edit", |ui| {
                         if ui.button("Undo · Ctrl+Z").clicked() {
-                            if self.history.undo(&mut self.sheet) {
+                            if self.undo_project() {
                                 self.dirty = true;
                                 self.drc_stale = true;
                                 self.invalidate();
@@ -896,7 +942,7 @@ impl App {
                             ui.close_menu();
                         }
                         if ui.button("Redo · Ctrl+Y").clicked() {
-                            if self.history.redo(&mut self.sheet) {
+                            if self.redo_project() {
                                 self.dirty = true;
                                 self.drc_stale = true;
                                 self.invalidate();
@@ -920,11 +966,15 @@ impl App {
                     for (t, s) in [
                         (Tab::Schematic, "Schematic"),
                         (Tab::Pcb, "PCB layout"),
+                        (Tab::Pcb3d, "PCB 3D"),
                         (Tab::Simulation, "Waveforms"),
                         (Tab::Spice, "SPICE"),
                         (Tab::Bom, "BOM"),
                     ] {
                         if ui.selectable_label(self.tab == t, s).clicked() {
+                            if t != Tab::Schematic {
+                                self.root_page();
+                            }
                             self.set_tool(Tool::Select);
                             self.selected = None;
                             if t == Tab::Pcb {
@@ -985,12 +1035,14 @@ impl App {
     fn left(&mut self, ctx: &egui::Context) {
         egui::SidePanel::left("library").default_width(230.).resizable(true).width_range(190. ..=330.).frame(egui::Frame::new().fill(PANEL).inner_margin(14)).show(ctx,|ui|{
  ui.label(RichText::new("PROJECT").strong().size(10.).color(MUTED));let before=self.sheet.clone();
- if ui.add(egui::TextEdit::singleline(&mut self.sheet.title).desired_width(f32::INFINITY)).changed(){self.history.record(&before);self.dirty=true;}
+ if ui.add(egui::TextEdit::singleline(&mut self.sheet.title).desired_width(f32::INFINITY)).changed(){self.history.record(&self.project_with(&before));self.dirty=true;}
  ui.label(RichText::new(format!("{} parts · {} wires",self.sheet.components.len(),self.sheet.wires.len())).size(11.).color(MUTED));
- egui::CollapsingHeader::new("Project notes").show(ui,|ui|{let before=self.sheet.clone();if ui.add(egui::TextEdit::multiline(&mut self.sheet.notes).desired_rows(4)).changed(){self.history.record(&before);self.dirty=true;}});
+ egui::CollapsingHeader::new("Project notes").show(ui,|ui|{let before=self.sheet.clone();if ui.add(egui::TextEdit::multiline(&mut self.sheet.notes).desired_rows(4)).changed(){self.history.record(&self.project_with(&before));self.dirty=true;}});
+ if self.tab==Tab::Schematic { self.hierarchy_tools(ui); }
  ui.add_space(12.);
  match self.tab{
  Tab::Pcb=>self.pcb_tools(ui),
+ Tab::Pcb3d=>self.mesh_tools(ui),
  Tab::Simulation=>{
  self.simulation_tools(ui);ui.separator();ui.label(RichText::new("SIGNALS").size(11.).strong().color(MUTED));
  if let Some(sim)=&self.result{egui::ScrollArea::vertical().max_height((ui.available_height()-50.).max(30.)).show(ui,|ui|{
@@ -1142,13 +1194,17 @@ impl App {
                     ui.selectable_value(&mut self.route_net, net.name.clone(), net.name);
                 }
             });
+        self.router_tools(ui);
         ui.checkbox(&mut self.show_ratsnest, "Show unrouted connections");
         ui.label(RichText::new("Start on a pad to select its net. Click corners/endpoints; Esc finishes. Use a via to join the two layers.").size(11.).color(MUTED));
         ui.add_space(10.);
         ui.separator();
         if ui.button("Synchronize from schematic").clicked() {
             self.checkpoint();
-            self.sheet.sync_board();
+            if let Err(e) = self.sheet.try_sync_board() {
+                self.say(e, true);
+                return;
+            }
             self.say(
                 "Footprints updated; existing routing retained. Run DRC.",
                 false,
@@ -1190,9 +1246,7 @@ impl App {
             }
         });
         if changed {
-            self.history.record(&before);
-            self.dirty = true;
-            self.drc_stale = true;
+            self.changed(&before);
         }
         ui.add_space(8.);
         ui.label(RichText::new("Pad numbering follows SPICE terminal order. Check against the physical component datasheet.").size(11.).color(ORANGE));
@@ -1369,7 +1423,13 @@ impl App {
             .width_range(220. ..=420.)
             .frame(egui::Frame::new().fill(PANEL).inner_margin(14))
             .show(ctx, |ui| {
-                if self.tab == Tab::Pcb {
+                if self.tab == Tab::Pcb3d {
+                    ui.heading("3D geometry");
+                    ui.label(format!("{} footprints · {} tracks · {} vias",self.sheet.board.footprints.len(),self.sheet.board.tracks.len(),self.sheet.board.vias.len()));
+                    ui.label("Both copper layers use the same pad and track coordinates as DRC and manufacturing exports.");
+                    ui.colored_label(ORANGE,"Component bodies are approximate; substrate drill holes are not cut from the review mesh.");
+                    ui.label("Use PCB layout for electrical DRC. OBJ is a review mesh; STEP and vendor 3D models remain future work.");
+                } else if self.tab == Tab::Pcb {
                     self.inspector(ui);
                     ui.separator();
                     ui.label(
@@ -1532,12 +1592,19 @@ impl App {
  });
     }
     fn bom(&mut self, ui: &mut egui::Ui) {
+        let parts = match flatten(&self.project()) {
+            Ok(f) => f.components,
+            Err(e) => {
+                ui.colored_label(RED, e);
+                return;
+            }
+        };
         egui::Frame::new().inner_margin(20).show(ui,|ui|{
  ui.horizontal(|ui|{ui.heading("Bill of materials");if ui.button("Export CSV…").clicked(){self.request_file(FileAction::Bom);}});
  ui.label(RichText::new("Generic models and footprints do not identify purchasable parts. Sources represent external signal / power connections.").size(12.).color(MUTED));ui.add_space(12.);
  egui::ScrollArea::both().show(ui,|ui|{egui::Grid::new("bom").striped(true).min_col_width(100.).spacing(Vec2::new(18.,12.)).show(ui,|ui|{
  for s in ["Reference","Type","Value / model","Footprint"]{ui.label(RichText::new(s).strong().color(GREEN));}ui.end_row();
- for c in &self.sheet.components{if ui.selectable_label(self.selected==Some(Selection::Component(c.id)),&c.reference).clicked(){self.selected=Some(Selection::Component(c.id));}ui.label(c.kind.name());ui.label(&c.value);ui.label(&c.footprint);ui.end_row();}
+ for c in &parts{ui.label(&c.reference);ui.label(c.kind.name());ui.label(&c.value);ui.label(&c.footprint);ui.end_row();}
  });});
  });
     }
@@ -1547,6 +1614,7 @@ impl App {
             .show(ctx, |ui| match self.tab {
                 Tab::Schematic => self.schematic(ui),
                 Tab::Pcb => self.pcb(ui),
+                Tab::Pcb3d => self.pcb_3d(ui),
                 Tab::Simulation => self.waveforms(ui),
                 Tab::Spice => self.spice_workspace(ui),
                 Tab::Bom => self.bom(ui),
@@ -1650,6 +1718,7 @@ fn style(ctx: &egui::Context) {
 impl eframe::App for App {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         self.poll();
+        self.poll_router(ctx);
         self.shortcuts(ctx);
         if self.job.is_some() {
             ctx.request_repaint_after(Duration::from_millis(40));

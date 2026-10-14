@@ -10,8 +10,9 @@ fn write(p: &Path, s: impl AsRef<[u8]>) -> Result<(), String> {
 fn export(s: &Sheet, dir: &Path) -> Result<(), String> {
     fs::create_dir_all(dir).map_err(|e| e.to_string())?;
     write(&dir.join("schematic.svg"), schematic_svg(s))?;
-    write(&dir.join("bom.csv"), bom_csv(s))?;
+    write(&dir.join("bom.csv"), bom_csv(&flatten(s)?))?;
     write(&dir.join("placement.csv"), s.board.placement_csv())?;
+    write(&dir.join("board.obj"), s.board.mesh(true)?.obj())?;
     write(&dir.join("board.svg"), s.board.svg()?)?;
     write(&dir.join("circuit.cir"), format!("{}\n.end\n", netlist(s)?))?;
     let fab = dir.join("fabrication");
@@ -23,7 +24,7 @@ fn export(s: &Sheet, dir: &Path) -> Result<(), String> {
         &dir.join("checks.txt"),
         format!(
             "ERC:\n{}\nPCB:\n{}\n",
-            connect(s)
+            connect(&flatten(s)?)
                 .issues
                 .iter()
                 .map(|i| i.message.as_str())
@@ -41,7 +42,7 @@ fn export(s: &Sheet, dir: &Path) -> Result<(), String> {
 fn run() -> Result<(), String> {
     let args = std::env::args().skip(1).collect::<Vec<_>>();
     if args.is_empty() || args[0] == "--help" {
-        println!("CircuitCraft CLI\nexamples DIRECTORY\nexport PROJECT DIRECTORY\nvalidate PROJECT\ncheck-engine REPORT [--engine PATH]\nsimulate PROJECT op|linear|ac|tran|dc|noise OUTPUT.csv [--engine PATH --start VALUE --stop VALUE --step VALUE --points N --source V1 --output VOUT --uic --measurements REPORT.csv]\nsweep PROJECT op|ac|tran|dc|noise OUTPUT.csv --component R1 --values 500,1k,2k [--measurements REPORT.csv]\nSignal math: --math-a SIGNAL --math-b SIGNAL --math-op ratio|difference|product");
+        println!("CircuitCraft CLI\nexamples DIRECTORY\nexport PROJECT DIRECTORY\nvalidate PROJECT\nautoroute PROJECT OUTPUT.cforge [--grid 0.5 --width 0.3]\npcb3d PROJECT OUTPUT.obj\ncheck-engine REPORT [--engine PATH]\nsimulate PROJECT op|linear|ac|tran|dc|noise OUTPUT.csv [--engine PATH --start VALUE --stop VALUE --step VALUE --points N --source V1 --output VOUT --uic --measurements REPORT.csv]\nsweep PROJECT op|ac|tran|dc|noise OUTPUT.csv --component R1 --values 500,1k,2k [--measurements REPORT.csv]\nSignal math: --math-a SIGNAL --math-b SIGNAL --math-op ratio|difference|product");
         return Ok(());
     }
     let arg = |i| {
@@ -72,11 +73,15 @@ fn run() -> Result<(), String> {
     if args[0] == "examples" {
         let dir = PathBuf::from(arg(1)?);
         fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
-        for (name, s) in [
+        for (name, mut s) in [
             ("voltage-divider", Sheet::divider()),
             ("rc-lowpass", Sheet::rc()),
             ("half-wave-rectifier", Sheet::rectifier()),
+            ("hierarchical-divider", hierarchical_divider()),
         ] {
+            if name == "hierarchical-divider" {
+                s.autoroute(&RouteOptions::default())?;
+            }
             write(&dir.join(format!("{name}.cforge")), s.to_json()?)?;
             export(&s, &dir.join(name))?;
         }
@@ -90,11 +95,31 @@ fn run() -> Result<(), String> {
         return Ok(());
     }
     let project = arg(1)?;
-    let s = Sheet::from_json(&fs::read_to_string(&project).map_err(|e| e.to_string())?)?;
+    let mut s = Sheet::from_json(&fs::read_to_string(&project).map_err(|e| e.to_string())?)?;
     match args[0].as_str() {
         "export" => export(&s, Path::new(&arg(2)?))?,
+        "autoroute" => {
+            let o = RouteOptions {
+                grid: value("--grid", "0.5")?,
+                width: value("--width", "0.3")?,
+                ..Default::default()
+            };
+            let r = s.autoroute(&o)?;
+            write(Path::new(&arg(2)?), s.to_json()?)?;
+            println!(
+                "Routed: {}, remaining: {}, tracks: {}, vias: {}",
+                r.routed, r.remaining, r.added_tracks, r.added_vias
+            );
+            for b in r.blocked {
+                println!("{b}");
+            }
+            if r.remaining > 0 {
+                return Err("Partial route saved; unresolved connections remain. Reposition footprints or reduce the grid.".into());
+            }
+        }
+        "pcb3d" => write(Path::new(&arg(2)?), s.board.mesh(true)?.obj())?,
         "validate" => {
-            let n = connect(&s);
+            let n = connect(&flatten(&s)?);
             let drc = s.pcb_drc();
             println!("ERC: {}, PCB DRC: {}", n.issues.len(), drc.len());
             for i in &n.issues {

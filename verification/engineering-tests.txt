@@ -1,0 +1,68 @@
+   Compiling circuitcraft-core v0.3.0 (/workspace/scratch/84c2379ad928/CircuitCraft/core)
+   Compiling circuitcraft v0.3.0 (/workspace/scratch/84c2379ad928/CircuitCraft/desktop)
+   Compiling circuitcraft-cli v0.3.0 (/workspace/scratch/84c2379ad928/CircuitCraft/cli)
+    Finished `test` profile [unoptimized] target(s) in 8.31s
+     Running unittests src/main.rs (target/debug/deps/circuitcraft-b40fd283ea6deac4)
+
+running 7 tests
+test tests::hierarchical_edit_save_and_undo_preserve_the_whole_project ... ok
+test tests::background_router_applies_once_and_undo_restores_routing ... ok
+test tests::placement_wiring_and_history ... ok
+test tests::pcb_pad_snapping_and_routing ... ok
+test tests::render_hierarchy_with_real_frames ... ok
+test tests::sweep_noise_and_custom_footprint_workflows ... ok
+test tests::render_all_workspaces ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.68s
+
+     Running unittests src/main.rs (target/debug/deps/circuitcraft_cli-4652d631d2d16e5f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/circuitcraft_core-7c87709007a68e38)
+
+running 13 tests
+test measure::tests::complex_gain_and_zero_denominator ... ok
+test measure::tests::adaptive_time_statistics_are_integrals ... ok
+test board::tests::route_connectivity_and_short ... ok
+test net::tests::crossing_and_junctions ... ok
+test spice::tests::raw_and_control_errors ... ok
+test net::tests::divider_topology ... ok
+test model::tests::roundtrip_and_history ... ok
+test spice::tests::analytic_linear_dc ... ok
+test assembly::tests::custom_footprints_roundtrip_rotate_and_export ... ok
+test board::tests::routed_examples_and_stale_footprints ... ok
+test spice::tests::relative_include_with_spaces ... ok
+test spice::tests::physical_ngspice_comparison ... ok
+test sweep::tests::sweep_validation_and_physical_rc_cutoffs ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/engineering.rs (target/debug/deps/engineering-d531b9a412291696)
+
+running 7 tests
+test private_labels_do_not_connect_sibling_pages ... ok
+test invalid_ports_and_hierarchy_limits_are_rejected ... ok
+test router_crosses_top_barrier_using_vias_and_preserves_copper ... ok
+test blocked_or_cancelled_router_never_creates_invalid_copper ... ok
+test mesh_matches_rotated_pad_track_layer_and_obj_indices ... ok
+test hierarchical_ports_flatten_deterministically_and_simulate ... ok
+test router_routes_reference_boards_and_saved_ids_remain_unique ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/noise.rs (target/debug/deps/noise-4bd6600abde9b556)
+
+running 1 test
+test johnson_noise_matches_thermal_formula ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+   Doc-tests circuitcraft_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

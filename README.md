@@ -1,7 +1,9 @@
 # CircuitCraft
-**Native Rust circuit schematics, real SPICE simulation, and two-layer PCB layout.**
+**Native Rust circuit schematics, real SPICE simulation, hierarchical pages, automatic routing and two-layer PCB review in 3D.**
 
-**[Download CircuitCraft 0.2.0 — Windows x64](https://github.com/Berserk-hub150/CircuitCraft/releases/download/v0.2.0/CircuitCraft-0.2.0-Windows-x64.zip)** · [Advanced features](docs/ADVANCED_FEATURES.md) · [Roadmap](ROADMAP.md)
+**[Windows downloads / releases](https://github.com/Berserk-hub150/CircuitCraft/releases)** · [Engineering workflows](docs/ENGINEERING_WORKFLOWS.md) · [Advanced features](docs/ADVANCED_FEATURES.md) · [Roadmap](ROADMAP.md)
+
+The 0.3 source adds routing, hierarchy and 3D. The release workflow builds and tests its Windows ZIP before publication; the existing 0.2 download does not include these additions.
 
 Design a schematic, derive electrical connectivity, inspect ngspice waveforms, route a board and export fabrication data. Includes source, a Windows desktop executable, a CLI and the original ngspice 47 engine distribution.
 
@@ -9,6 +11,8 @@ Design a schematic, derive electrical connectivity, inspect ngspice waveforms, r
 ![Waveforms](docs/waveforms.png)
 ![Component parameter sweep](docs/parameter-sweep.png)
 ![PCB](docs/pcb.png)
+![PCB 3D review](docs/pcb-3d.png)
+![Hierarchical pages](docs/hierarchy.png)
 
 ## Windows quick start
 1. Extract the **whole ZIP**, including subfolders.
@@ -20,7 +24,18 @@ Windows 10/11 x64 and a working graphics driver are required. No account or clou
 
 Italian instructions: [LEGGIMI.md](LEGGIMI.md). Precise scope: [FEATURES.md](FEATURES.md). Validation and platform limits: [VERIFICATION.md](VERIFICATION.md).
 
-## New in 0.2.0
+## New in 0.3.0
+
+| Feature | Working behavior |
+|---|---|
+| Two-layer autorouter | A* routing with real pad endpoints, copper/edge clearance, vias, preserved manual tracks, background cancellation and undo; partial routes reported explicitly |
+| Hierarchical schematic pages | Nested embedded pages, explicit label-to-parent port bindings, isolated local nets, global ground and deterministic flattening for simulation/BOM/PCB |
+| PCB 3D review | Depth-buffered orbit/zoom/pan, top/bottom/isometric views, saved board thickness, copper visibility and approximate component bodies |
+| 3D export | Millimetre-scale OBJ from the same review geometry, via File or CLI |
+
+[Controls, limits and examples](docs/ENGINEERING_WORKFLOWS.md).
+
+## Added in 0.2.0
 
 | Feature | Working behavior |
 |---|---|
@@ -37,18 +52,18 @@ See [Advanced features](docs/ADVANCED_FEATURES.md) for exact controls, units, in
 
 | Area | Features |
 |---|---|
-| Schematic | Grid, selection, placement, movement, rotation, duplication, deletion, orthogonal wires, junctions, ground, remote labels, undo/redo, pan/zoom |
+| Schematic | Hierarchical embedded pages with explicit ports; grid, selection, placement, movement, rotation, duplication, deletion, orthogonal wires, junctions, ground, remote labels, undo/redo, pan/zoom |
 | Components | R/C/L, voltage/current sources, diode, LED, NPN/PNP, NMOS/PMOS, ideal op amp, controlled switch, connector, four-pin subcircuit |
 | Connectivity / ERC | Electrical graph, globally connected grounds, named remote nets, explicit crossing rules, missing ground, duplicate references, malformed values, dangling terminals |
 | Simulation | ngspice operating point, AC, transient, DC source sweep, component sweep and noise; source waveforms, models, parameters, includes and subcircuits |
 | Waveforms | Multiple traces, magnitude/dB/phase/real/imaginary, log frequency axis, cursor, min/max, peak-preserving plotting, full-resolution CSV |
 | Rust solver | Modified nodal analysis for linear DC R/C/L/V/I, with singular-circuit diagnostics |
-| PCB | Two copper layers, seven base footprints plus editable custom pads, schematic synchronization, pad snapping, placement/rotation, manual routing, plated vias, ratsnest |
+| PCB | Two copper layers, seven base footprints plus editable custom pads, schematic synchronization, pad snapping, placement/rotation, manual and automatic routing, plated vias, ratsnest, interactive 3D review |
 | DRC | Shorts, copper clearance, edge clearance, minimum track width, unrouted pads, missing/stale footprints, unknown track nets |
-| Exchange | SPICE, schematic/PCB SVG, BOM, waveform/measurement/sweep/placement CSV, copper/mask/paste/silk/outline Gerber and plated Excellon drills |
+| Exchange | 3D OBJ, SPICE, schematic/PCB SVG, BOM, waveform/measurement/sweep/placement CSV, copper/mask/paste/silk/outline Gerber and plated Excellon drills |
 | Project / automation | JSON save/open, notes, textual SPICE workspace, CLI exports, validation, batch simulation and engine verification |
 
-**This is an initial EDA release with a limited library. It does not claim full parity with every feature of KiCad, Altium, Proteus or other professional suites.** Autorouting, copper pours, hierarchical sheets, 3D PCB, native third-party project import and digital/MCU co-simulation remain future work.
+**This is an initial EDA release with a limited library. It does not claim full parity with every feature of KiCad, Altium, Proteus or other professional suites.** Copper pours, push/shove, linked external hierarchical sheets, graphical sheet-box symbols, manufacturer 3D models/STEP, native third-party project import and digital/MCU co-simulation remain future work. The autorouter is bounded and does not guarantee completion; 3D bodies are approximate review envelopes.
 
 The UI, connectivity and linear solver are Rust. Advanced simulation uses **ngspice**, a separate C engine.
 
@@ -103,6 +118,8 @@ cargo run -p circuitcraft-cli -- simulate examples/rc-lowpass.cforge tran transi
 cargo run -p circuitcraft-cli -- sweep examples/rc-lowpass.cforge ac sweep.csv --component R1 --values 500,1k,2k --measurements sweep-measurements.csv
 cargo run -p circuitcraft-cli -- simulate examples/rc-lowpass.cforge noise noise.csv --output VOUT --source V1 --measurements noise-measurements.csv
 cargo run -p circuitcraft-cli -- simulate examples/rc-lowpass.cforge ac gain.csv --math-a 'v(vout)' --math-b 'v(vin)' --math-op ratio
+cargo run -p circuitcraft-cli -- autoroute input.cforge routed.cforge --grid 0.5 --width 0.3
+cargo run -p circuitcraft-cli -- pcb3d routed.cforge board.obj
 cargo run -p circuitcraft-cli -- check-engine engine-report.txt --engine /path/to/ngspice
 ```
 Windows also includes `windows/circuitcraft-cli.exe`.

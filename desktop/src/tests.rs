@@ -95,6 +95,80 @@ fn pcb_pad_snapping_and_routing() {
     assert!(a.route_start.is_none());
 }
 #[test]
+fn hierarchical_edit_save_and_undo_preserve_the_whole_project() {
+    let mut a = App::default();
+    a.replace(hierarchical_divider());
+    a.enter_page(0);
+    a.checkpoint();
+    a.sheet.components[0].value = "2k".into();
+    let path = std::env::temp_dir().join(format!(
+        "circuitcraft-hierarchy-{}.cforge",
+        std::process::id()
+    ));
+    a.file_do(FileAction::SaveAs, &path);
+    let saved = Sheet::from_json(&fs::read_to_string(&path).unwrap()).unwrap();
+    assert_eq!(saved.components.len(), 2);
+    assert_eq!(saved.children[0].sheet.components[0].value, "2k");
+    assert!(a.undo_project());
+    assert!(a.parents.is_empty());
+    assert_eq!(a.sheet.children[0].sheet.components[0].value, "1k");
+    assert!(a.redo_project());
+    assert_eq!(a.sheet.children[0].sheet.components[0].value, "2k");
+    let _ = fs::remove_file(path);
+}
+#[test]
+fn background_router_applies_once_and_undo_restores_routing() {
+    let ctx = egui::Context::default();
+    let mut a = App::default();
+    a.sheet.board.tracks.clear();
+    a.start_router();
+    for _ in 0..300 {
+        a.poll_router(&ctx);
+        if !a.router_running() {
+            break;
+        }
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    assert!(!a.router_running());
+    assert!(a.sheet.board.ratsnest().is_empty(), "{}", a.status);
+    assert!(a.undo_project());
+    assert!(a.sheet.board.tracks.is_empty());
+    a.start_router();
+    a.checkpoint();
+    a.sheet.components[1].value = "3k".into();
+    for _ in 0..300 {
+        a.poll_router(&ctx);
+        if !a.router_running() {
+            break;
+        }
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    assert_eq!(a.sheet.components[1].value, "3k");
+    assert!(a.sheet.board.tracks.is_empty());
+}
+#[test]
+fn render_hierarchy_with_real_frames() {
+    let ctx = egui::Context::default();
+    style(&ctx);
+    let mut a = App::default();
+    a.sheet = hierarchical_divider();
+    let first = frame(&ctx, &mut a, vec![]);
+    let mut out = frame(&ctx, &mut a, vec![]);
+    let mut textures = first.textures_delta.set;
+    textures.extend(out.textures_delta.set.clone());
+    out.textures_delta.set = textures;
+    assert!(out.shapes.len() > 100);
+    if let Ok(dir) = std::env::var("CIRCUITCRAFT_REVIEW") {
+        fs::create_dir_all(&dir).unwrap();
+        render(&ctx, &out, &format!("{dir}/hierarchy.ppm"));
+    }
+    a.enter_page(0);
+    assert_eq!(a.sheet.title, "Load");
+    frame(&ctx, &mut a, vec![]);
+    a.leave_page();
+    assert_eq!(a.sheet.components.len(), 2);
+}
+#[test]
 fn sweep_noise_and_custom_footprint_workflows() {
     if std::env::var("CIRCUITCRAFT_NGSPICE_TESTS").is_err() {
         return;
@@ -178,6 +252,7 @@ fn render_all_workspaces() {
     for tab in [
         Tab::Schematic,
         Tab::Pcb,
+        Tab::Pcb3d,
         Tab::Simulation,
         Tab::Spice,
         Tab::Bom,
@@ -214,12 +289,13 @@ fn render_all_workspaces() {
         let mut textures = first.textures_delta.set;
         textures.extend(out.textures_delta.set.clone());
         out.textures_delta.set = textures;
-        assert!(out.shapes.len() > 100);
+        assert!(out.shapes.len() > if tab == Tab::Pcb3d { 40 } else { 100 });
         if let Ok(dir) = std::env::var("CIRCUITCRAFT_REVIEW") {
             fs::create_dir_all(&dir).unwrap();
             let name = match tab {
                 Tab::Schematic => "schematic",
                 Tab::Pcb => "pcb",
+                Tab::Pcb3d => "pcb-3d",
                 Tab::Simulation => "waveforms",
                 Tab::Spice => "spice",
                 Tab::Bom => "bom",

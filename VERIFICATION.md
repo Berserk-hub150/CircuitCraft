@@ -1,7 +1,10 @@
 # Verification — 2026-10-14
-**18 tests passed, zero failures:** 13 core unit tests, 1 numerical integration test and 4 desktop tests, including actual ngspice runs.
+**28 tests passed, zero failures:** 13 existing core unit tests, 7 engineering integration tests, 1 noise integration test and 7 desktop tests, including actual Linux ngspice 42 runs.
 
 | Check | Result |
+| Autorouter | Four reference boards complete with zero implemented DRC issues; off-grid SMD endpoints cross a full-height top-layer obstacle using bottom copper and two vias; manual copper preserved; blocked, cancelled and invalid-board cases retain the original board |
+| Hierarchy | Deterministic flattening, stable IDs after sibling insertion, private-label isolation, shared ground, invalid/missing port rejection, depth limit; analytic and ngspice voltage checks; complete-tree save/undo/redo and PCB synchronization |
+| PCB 3D | Shared millimetre geometry, substrate thickness, rotated pads, top/bottom track material, valid OBJ face indices, component visibility, old-project default thickness and real egui frame rendering |
 |---|---|
 | Rust linear DC | 10 V, 1 kΩ / 1 kΩ divider: 5 V, 5 mA |
 | ngspice 42 operating point | 5.000000000 V output |
@@ -14,7 +17,7 @@
 | Project/history | JSON round-trip, unique IDs, undo/redo |
 | PCB | Routing reduces unrouted nets; shorts detected; all three demo boards pass implemented rules; stale footprints detected |
 | GUI | Pointer-event placement, wiring, undo, pad snapping and routing through actual egui frames |
-| Rendering | All five workspaces plus sweep and noise scenarios rendered from real egui meshes and reviewed |
+| Rendering | All six workspaces plus hierarchy, sweep and noise scenarios rendered from real egui meshes and reviewed |
 | Exchange | Independent gerbonara parser: all seven Gerber layers and correct hole counts/coordinates in four examples, including a custom SMD footprint; SVG and BOM also parsed |
 | Windows | Desktop and CLI compiled for x86_64-pc-windows-gnu; imports inspected |
 | Parameter sweep | R1 = 500 / 1,000 / 2,000 Ω: cutoff 318.295902 / 159.154945 / 79.588397 Hz; within 0.1% of analytic RC values |

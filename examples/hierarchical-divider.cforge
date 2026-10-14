@@ -1,0 +1,309 @@
+{
+  "format_version": 2,
+  "title": "Hierarchical voltage divider",
+  "components": [
+    {
+      "id": 1,
+      "kind": "Voltage",
+      "reference": "V1",
+      "value": "DC 10",
+      "at": {
+        "x": 0,
+        "y": 0
+      },
+      "rotation": 0,
+      "params": "",
+      "footprint": "THT-2-5.08",
+      "custom_pads": []
+    },
+    {
+      "id": 2,
+      "kind": "Resistor",
+      "reference": "R1",
+      "value": "1k",
+      "at": {
+        "x": 6,
+        "y": -2
+      },
+      "rotation": 0,
+      "params": "",
+      "footprint": "THT-2-5.08",
+      "custom_pads": []
+    }
+  ],
+  "wires": [
+    {
+      "id": 3,
+      "points": [
+        {
+          "x": 0,
+          "y": -2
+        },
+        {
+          "x": 4,
+          "y": -2
+        }
+      ]
+    }
+  ],
+  "grounds": [
+    {
+      "x": 0,
+      "y": 2
+    }
+  ],
+  "junctions": [],
+  "labels": [
+    {
+      "id": 4,
+      "at": {
+        "x": 8,
+        "y": -2
+      },
+      "name": "OUT"
+    }
+  ],
+  "spice_models": "",
+  "raw_netlist": "",
+  "raw_mode": false,
+  "include_directory": "",
+  "notes": "",
+  "board": {
+    "width": 80.0,
+    "height": 60.0,
+    "thickness": 1.6,
+    "clearance": 0.25,
+    "edge_clearance": 0.5,
+    "min_track": 0.2,
+    "footprints": [
+      {
+        "component_id": 1,
+        "reference": "V1",
+        "style": "THT-2-5.08",
+        "at": {
+          "x": 15.0,
+          "y": 15.0
+        },
+        "rotation": 0,
+        "nets": [
+          "N001",
+          "0"
+        ],
+        "custom_pads": []
+      },
+      {
+        "component_id": 2,
+        "reference": "R1",
+        "style": "THT-2-5.08",
+        "at": {
+          "x": 27.0,
+          "y": 15.0
+        },
+        "rotation": 0,
+        "nets": [
+          "N001",
+          "OUT"
+        ],
+        "custom_pads": []
+      },
+      {
+        "component_id": 12018726879111035240,
+        "reference": "R_LOAD_R1",
+        "style": "THT-2-5.08",
+        "at": {
+          "x": 39.0,
+          "y": 15.0
+        },
+        "rotation": 0,
+        "nets": [
+          "OUT",
+          "0"
+        ],
+        "custom_pads": []
+      }
+    ],
+    "tracks": [
+      {
+        "id": 5,
+        "net": "0",
+        "layer": "Top",
+        "width": 0.3,
+        "points": [
+          {
+            "x": 17.54,
+            "y": 15.0
+          },
+          {
+            "x": 23.0,
+            "y": 15.0
+          },
+          {
+            "x": 23.0,
+            "y": 14.0
+          },
+          {
+            "x": 23.5,
+            "y": 14.0
+          },
+          {
+            "x": 23.5,
+            "y": 13.5
+          },
+          {
+            "x": 41.0,
+            "y": 13.5
+          },
+          {
+            "x": 41.0,
+            "y": 15.0
+          },
+          {
+            "x": 41.54,
+            "y": 15.0
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "net": "n001",
+        "layer": "Top",
+        "width": 0.3,
+        "points": [
+          {
+            "x": 12.46,
+            "y": 15.0
+          },
+          {
+            "x": 16.0,
+            "y": 15.0
+          },
+          {
+            "x": 16.0,
+            "y": 16.0
+          },
+          {
+            "x": 16.5,
+            "y": 16.0
+          },
+          {
+            "x": 16.5,
+            "y": 16.5
+          },
+          {
+            "x": 18.5,
+            "y": 16.5
+          },
+          {
+            "x": 18.5,
+            "y": 16.0
+          },
+          {
+            "x": 23.5,
+            "y": 16.0
+          },
+          {
+            "x": 23.5,
+            "y": 15.5
+          },
+          {
+            "x": 24.0,
+            "y": 15.5
+          },
+          {
+            "x": 24.0,
+            "y": 15.0
+          },
+          {
+            "x": 24.46,
+            "y": 15.0
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "net": "out",
+        "layer": "Top",
+        "width": 0.3,
+        "points": [
+          {
+            "x": 29.54,
+            "y": 15.0
+          },
+          {
+            "x": 36.46,
+            "y": 15.0
+          }
+        ]
+      }
+    ],
+    "vias": []
+  },
+  "children": [
+    {
+      "instance": "LOAD",
+      "ports": [
+        {
+          "label": "IN",
+          "parent_net": "OUT"
+        }
+      ],
+      "sheet": {
+        "format_version": 2,
+        "title": "Load",
+        "components": [
+          {
+            "id": 1,
+            "kind": "Resistor",
+            "reference": "R1",
+            "value": "1k",
+            "at": {
+              "x": 0,
+              "y": 0
+            },
+            "rotation": 0,
+            "params": "",
+            "footprint": "THT-2-5.08",
+            "custom_pads": []
+          }
+        ],
+        "wires": [],
+        "grounds": [
+          {
+            "x": 2,
+            "y": 0
+          }
+        ],
+        "junctions": [],
+        "labels": [
+          {
+            "id": 2,
+            "at": {
+              "x": -2,
+              "y": 0
+            },
+            "name": "IN"
+          }
+        ],
+        "spice_models": "",
+        "raw_netlist": "",
+        "raw_mode": false,
+        "include_directory": "",
+        "notes": "",
+        "board": {
+          "width": 80.0,
+          "height": 60.0,
+          "thickness": 1.6,
+          "clearance": 0.25,
+          "edge_clearance": 0.5,
+          "min_track": 0.2,
+          "footprints": [],
+          "tracks": [],
+          "vias": []
+        },
+        "children": [],
+        "next_id": 3
+      }
+    }
+  ],
+  "next_id": 8
+}

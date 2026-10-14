@@ -1,39 +1,41 @@
 # CircuitCraft × ArtCraft — partnership proposal
 
-**Status: prepared draft, not sent.** CircuitCraft is an independent project.
+**Prepared draft, not sent.** CircuitCraft is an independent project maintained by Luca Magrini; no ArtCraft affiliation or endorsement is implied.
 
-Verified public contact on 14 October 2026: **hello@storyteller.ai**, published at https://getartcraft.com/apps. The same official page links their Discord for new app ideas and early-build feedback. Its published thirteen-app lineup covers creative applications, CAD and spreadsheets; no circuit editor is listed there. This is a fit hypothesis, not evidence that ArtCraft wants an EDA partnership.
+Official contact checked on 14 October 2026: **hello@storyteller.ai**, published on https://getartcraft.com/ and https://getartcraft.com/apps. The official apps page links https://discord.gg/artcraft for app ideas and early-build feedback. Its current thirteen-app lineup includes CAD but does not list an electronics/PCB design tool. That is a possible fit to discuss, not evidence that a partnership or sponsorship is available.
+
+## Send it step by step
+
+1. Open the latest Windows release at https://github.com/Berserk-hub150/CircuitCraft/releases. Version 0.3 includes the new workflows; 0.2 does not. Extract the whole ZIP and check launch, save/open, RC simulation, autorouting and 3D on your Windows machine.
+2. Prepare a 60–90 second screen recording: RC schematic → simulation → clear old tracks and autoroute → PCB 3D → hierarchical divider. The repository already contains actual interface screenshots and reproducible test instructions.
+3. Open Gmail and click Compose. Recipient: hello@storyteller.ai. Paste the subject/body below and include the repository link; add your short demo when ready. Prefer links over attaching a large executable ZIP.
+4. Ask for a technical review and one concrete pilot: a community feature, launcher/distribution evaluation, or milestone-based financial support. A first pilot could fund native Windows user testing, richer verified footprints and the next agreed engineering feature. Ask whether a budget is available; agree scope/amount after interest, without promising a delivery date before scoping.
+5. If they reply positively, agree the milestone, acceptance checks, amount/payment schedule, attribution and distribution responsibilities in writing. Provide a short product demonstration and ask who handles partner projects.
+6. If no reply, send one concise follow-up after 7–10 days. Optionally join their official Discord, follow the server rules and share the demo in a suitable channel visible there; channel names and direct-message permissions have not been verified. Avoid posting the commercial pitch in unrelated GitHub bug reports.
 
 ## Ready-to-send email
 
-**Subject:** CircuitCraft — Rust circuit design tool / pilot sponsorship proposal
+**Subject:** CircuitCraft — Rust electronics design tool / partnership proposal
 
 Hi ArtCraft team,
 
-I'm Luca Magrini, an Informatics graduate from the University of Camerino. I've built CircuitCraft, an independent, MIT-licensed desktop tool for schematic editing, SPICE simulation and two-layer PCB design:
+I'm Luca Magrini, a Computer Science graduate from the University of Camerino and the maintainer of CircuitCraft, an independent MIT-licensed desktop project:
 
 https://github.com/Berserk-hub150/CircuitCraft
 
-The editor and circuit connectivity are Rust; advanced simulation uses the separate ngspice engine. The current release includes real AC/transient/DC/noise analyses, component parameter sweeps, automatic measurements, custom footprint editing and Gerber/Excellon exports. The repository includes reproducible tests, actual interface screenshots and a Windows download.
+The schematic editor, connectivity, PCB tools and UI are Rust; advanced simulation uses the separate ngspice engine. The 0.3 source includes hierarchical pages, a two-layer autorouter with clearance checks, interactive PCB 3D review/OBJ, parameter sweeps, noise analysis and Gerber/Excellon exports. Tests and actual interface screenshots are included. This is an early EDA release with documented limits, including approximate 3D component bodies and a bounded autorouter.
 
-Your published Crafting Apps lineup includes CAD but does not list an electronics design tool. I think CircuitCraft could be an interesting adjacent project for your community.
+Your Crafting Apps lineup includes CAD but currently does not list an electronics design tool. Would you consider a short technical review and a small pilot partnership?
 
-Would you consider a small pilot partnership? I can provide a short demo and a scoped development milestone. I'm seeking either distribution support (a community feature or an evaluation for your launcher) or a small milestone-based sponsorship to improve native Windows validation and the next engineering workflow.
+I'm seeking a community feature or distribution/launcher evaluation, or milestone-based sponsorship to fund native Windows validation and the next agreed engineering improvement. I can provide a short demo and a written milestone with reproducible acceptance checks.
 
-A proposed pilot would deliver a reproducible Windows package, a compact set of validated circuits and an agreed feature with tests and documentation. Scope, funding, credit and any distribution integration would be agreed with you first.
-
-This is an early release with documented limits; I am not claiming parity with every professional EDA suite. If it fits your direction, could we arrange a brief technical review or could you point me to the right person?
+Could you point me to the person responsible for partnerships or open-source app collaboration?
 
 Best,
 Luca Magrini
 
-## Concrete pilot to discuss
+## If they ask what sponsorship would deliver
 
-| Deliverable | Reviewable evidence |
-|---|---|
-| 10-minute product demo | Draw → three-value RC sweep → noise → custom pads → PCB fabrication export |
-| Windows package validation | Native launch/file dialogs, engine version, checksum, three physical reference circuits |
-| One agreed engineering milestone | Small written scope; test cases; merged source; updated examples and documentation |
-| Visibility or financial support | Optional community feature/distribution review or a small grant; no amount, commitment or endorsement assumed |
+Propose one small scoped milestone, such as Windows package/user-test validation and a compact set of independently checked circuit/footprint examples. Supply a checklist, demonstration, merged code, updated tests/docs and a release with checksums. Discuss the budget only after agreeing the work; no amount, acceptance, transfer of ownership or ArtCraft branding is assumed.
 
-Suggested sequence: send the email with the repository and download links; prepare the demo; if they are interested, agree a single milestone and a concrete support request. One concise follow-up after about a week is enough. Do not invent stars, users, commercial validation or a pre-existing affiliation.
+CircuitCraft is not fully pure Rust: ngspice is a separate C engine. Explain this directly if they consider suite or launcher integration.
