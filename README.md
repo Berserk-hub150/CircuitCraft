@@ -1,5 +1,7 @@
 # CircuitCraft
 
+<img src="docs/branding/circuitcraft-logo.png" alt="CircuitCraft electric salamander logo" width="144" height="144">
+
 **Draw a circuit. Simulate it with ngspice. Explore its PCB in 3D.**
 
 CircuitCraft is a free, open-source desktop circuit design tool with a native Rust interface. It brings schematic editing, SPICE simulation and a two-layer PCB workflow into one application.
