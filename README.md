@@ -10,7 +10,7 @@ CircuitCraft is a free, open-source desktop circuit design tool with a native Ru
 
 **MIT-licensed CircuitCraft code · Offline desktop workflow · No account required**
 
-**[Video tour — 28 seconds (MP4)](docs/media/CircuitCraft-Demo.mp4)** · [Download video](https://raw.githubusercontent.com/Berserk-hub150/CircuitCraft/main/docs/media/CircuitCraft-Demo.mp4)
+![CircuitCraft animated tour: schematic editing, ngspice simulation, PCB routing and 3D review](docs/media/CircuitCraft-Demo.gif)
 
 ![CircuitCraft schematic editor showing an example circuit](docs/schematic.png)
 
