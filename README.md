@@ -1,28 +1,49 @@
 # CircuitCraft
-**Native Rust circuit schematics, real SPICE simulation, hierarchical pages, automatic routing and two-layer PCB review in 3D.**
 
-**[Windows downloads / releases](https://github.com/Berserk-hub150/CircuitCraft/releases)** · [Engineering workflows](docs/ENGINEERING_WORKFLOWS.md) · [Advanced features](docs/ADVANCED_FEATURES.md) · [Roadmap](ROADMAP.md)
+**Draw a circuit. Simulate it with ngspice. Explore its PCB in 3D.**
 
-The 0.3 source adds routing, hierarchy and 3D. The release workflow builds and tests its Windows ZIP before publication; the existing 0.2 download does not include these additions.
+CircuitCraft is a free, open-source desktop circuit design tool with a native Rust interface. It brings schematic editing, SPICE simulation and a two-layer PCB workflow into one application.
 
-Design a schematic, derive electrical connectivity, inspect ngspice waveforms, route a board and export fabrication data. Includes source, a Windows desktop executable, a CLI and the original ngspice 47 engine distribution.
+**[Download Windows 0.3.0 (ZIP)](https://github.com/Berserk-hub150/CircuitCraft/releases/download/v0.3.0/CircuitCraft-0.3.0-Windows-x64.zip)** · [Release notes and checksums](https://github.com/Berserk-hub150/CircuitCraft/releases/tag/v0.3.0) · [First circuit walkthrough](docs/FIRST_CIRCUIT.md) · [Italian quick start](LEGGIMI.md)
 
-![Editor](docs/schematic.png)
-![Waveforms](docs/waveforms.png)
-![Component parameter sweep](docs/parameter-sweep.png)
-![PCB](docs/pcb.png)
-![PCB 3D review](docs/pcb-3d.png)
-![Hierarchical pages](docs/hierarchy.png)
+**MIT-licensed CircuitCraft code · Offline desktop workflow · No account required**
 
-## Windows quick start
-1. Extract the **whole ZIP**, including subfolders.
-2. Double-click `Start-CircuitCraft.bat` or `windows/circuitcraft.exe`.
-3. The RC filter opens. Press **F5** to simulate its frequency response.
-4. Use **Examples** for a voltage divider or half-wave rectifier, and **PCB layout** for the routed board.
+![CircuitCraft schematic editor showing an example circuit](docs/schematic.png)
 
-Windows 10/11 x64 and a working graphics driver are required. No account or cloud service is required. Retain the folder structure so the application finds the bundled engine.
+| Simulate and inspect waveforms | Review the PCB in 3D |
+|---|---|
+| ![ngspice waveform view](docs/waveforms.png) | ![Interactive PCB 3D review with approximate component bodies](docs/pcb-3d.png) |
 
-Italian instructions: [LEGGIMI.md](LEGGIMI.md). Precise scope: [FEATURES.md](FEATURES.md). Validation and platform limits: [VERIFICATION.md](VERIFICATION.md).
+## Start on Windows
+
+1. **[Download the complete Windows 0.3.0 ZIP](https://github.com/Berserk-hub150/CircuitCraft/releases/download/v0.3.0/CircuitCraft-0.3.0-Windows-x64.zip)** and extract **all** files and subfolders.
+2. Open `Start-CircuitCraft.bat` or `windows/circuitcraft.exe`.
+3. The RC low-pass example opens. Press **F5** to simulate its frequency response.
+4. Change **R1**, run again and compare the curves. Open **PCB layout** and **PCB 3D** to inspect the board.
+
+The **0.3.0 Windows release is available** and includes routing, hierarchical pages and PCB 3D review. The older 0.2 package does not include those additions.
+
+Windows 10/11 x64 and a working graphics driver are required. Keep the extracted folder structure so the app finds its bundled ngspice engine. Linux builds from source; macOS compilation is not verified.
+
+**[Follow the first-circuit walkthrough](docs/FIRST_CIRCUIT.md)** for an expected result, a parameter sweep and the PCB controls.
+
+## What can you do?
+
+- **Build schematics:** components, orthogonal wires, named nets, electrical checks, undo/redo and hierarchical pages.
+- **Run real SPICE analyses:** operating point, AC, transient, DC sweeps, component sweeps and noise through ngspice.
+- **Inspect signals:** waveform overlays, measurements, signal math and full-resolution CSV export.
+- **Explore a PCB workflow:** two copper layers, manual routing, bounded autorouting, vias, design-rule checks and interactive 3D review.
+- **Export your work:** SPICE, BOM, SVG, CSV, Gerber, Excellon drills and 3D OBJ.
+
+CircuitCraft is an **early EDA project with a limited component library**. The autorouter can leave connections unresolved; 3D component bodies are approximate review envelopes. See the full scope and current limits below.
+
+[Engineering workflows](docs/ENGINEERING_WORKFLOWS.md) · [Advanced features](docs/ADVANCED_FEATURES.md) · [Implemented scope](FEATURES.md) · [Validation](VERIFICATION.md) · [Roadmap](ROADMAP.md)
+
+## Try it and share feedback
+
+Start with the RC example, then try a circuit you understand. **[Report what worked or where you got stuck](https://github.com/Berserk-hub150/CircuitCraft/issues/new/choose)**: include your OS, app version, reproduction steps, and a small `.cforge` example or screenshot where possible.
+
+Contributions are welcome in circuit examples, numerical validation, bug fixes, documentation and platform testing. Read [CONTRIBUTING.md](CONTRIBUTING.md). If you want to follow the project's development, you can star the repository.
 
 ## New in 0.3.0
 
