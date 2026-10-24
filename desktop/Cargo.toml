@@ -7,4 +7,4 @@ license.workspace = true
 circuitcraft-core = { path = "../core" }
 eframe = { version = "=0.31.1", default-features = false, features = ["default_fonts", "glow", "x11", "wayland"] }
 [target.'cfg(windows)'.dependencies]
-windows-sys = { version = "0.59", features = ["Win32_UI_Controls_Dialogs", "Win32_Foundation"] }
+windows-sys = { version = "0.61", features = ["Win32_UI_Controls_Dialogs", "Win32_Foundation"] }
