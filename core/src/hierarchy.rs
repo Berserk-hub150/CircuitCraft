@@ -90,10 +90,10 @@ pub fn flatten(s: &Sheet) -> Result<Sheet, String> {
         names: &mut HashSet<String>,
     ) -> Result<(), String> {
         let n = connect(s);
-        for e in n
+        if let Some(e) = n
             .issues
             .iter()
-            .filter(|e| e.error && !e.message.starts_with("Missing electrical ground"))
+            .find(|e| e.error && !e.message.starts_with("Missing electrical ground"))
         {
             return Err(format!("{path}: {}", e.message));
         }
