@@ -6,7 +6,7 @@
 
 CircuitCraft is a free, open-source desktop circuit design tool with a native Rust interface. It brings schematic editing, SPICE simulation and a two-layer PCB workflow into one application.
 
-**[Download Windows 0.3.0 (ZIP)](https://github.com/Berserk-hub150/CircuitCraft/releases/download/v0.3.0/CircuitCraft-0.3.0-Windows-x64.zip)** · [Release notes and checksums](https://github.com/Berserk-hub150/CircuitCraft/releases/tag/v0.3.0) · [First circuit walkthrough](docs/FIRST_CIRCUIT.md) · [Italian quick start](LEGGIMI.md)
+**[Download Windows (latest release)](https://github.com/Berserk-hub150/CircuitCraft/releases/latest)** · [Release notes and SHA256 checksums](https://github.com/Berserk-hub150/CircuitCraft/releases) · [First circuit walkthrough](docs/FIRST_CIRCUIT.md) · [Italian quick start](LEGGIMI.md)
 
 **MIT-licensed CircuitCraft code · Offline desktop workflow · No account required**
 
@@ -20,14 +20,14 @@ CircuitCraft is a free, open-source desktop circuit design tool with a native Ru
 
 ## Start on Windows
 
-1. **[Download the complete Windows 0.3.0 ZIP](https://github.com/Berserk-hub150/CircuitCraft/releases/download/v0.3.0/CircuitCraft-0.3.0-Windows-x64.zip)** and extract **all** files and subfolders.
+1. **[Download the current Windows ZIP from Releases](https://github.com/Berserk-hub150/CircuitCraft/releases/latest)** and extract **all** files and subfolders.
 2. Open `Start-CircuitCraft.bat` or `windows/circuitcraft.exe`.
 3. The RC low-pass example opens. Press **F5** to simulate its frequency response.
 4. Change **R1**, run again and compare the curves. Open **PCB layout** and **PCB 3D** to inspect the board.
 
-The **0.3.0 Windows release is available** and includes routing, hierarchical pages and PCB 3D review. The older 0.2 package does not include those additions.
+The 0.3 series includes routing, hierarchical pages and PCB 3D review. Always choose the most recent verified release; the older 0.2 package does not include those additions.
 
-Windows 10/11 x64 and a working graphics driver are required. Keep the extracted folder structure so the app finds its bundled ngspice engine. Linux builds from source; macOS compilation is not verified.
+Windows 10/11 x64 and a working graphics driver are required. Keep the extracted folder structure so the app finds its bundled ngspice engine. Windows CI compiles the app and tests the CLI and ngspice; interactive Windows desktop launch and native file dialogs still need independent testing. Linux builds from source; macOS compilation is not verified.
 
 **[Follow the first-circuit walkthrough](docs/FIRST_CIRCUIT.md)** for an expected result, a parameter sweep and the PCB controls.
 

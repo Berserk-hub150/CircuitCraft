@@ -6,7 +6,7 @@ The implemented release is documented in README and FEATURES. Items below are pr
 
 | Priority | Milestone | Acceptance evidence |
 |---|---|---|
-| 1 | Native Windows validation and reproducible packages | Launch/file-picker checks on Windows 10/11; engine reports; signed release checksums |
+| 1 | Native Windows validation and reproducible packages | Launch/file-picker checks on Windows 10/11; engine reports; published SHA256 checksum manifests (cryptographic signing is future work) |
 | 2 | Linked sheets, graphical sheet boxes and arbitrary-pin symbols | Cross-sheet net fixtures; deterministic netlist; symbol/footprint pin mapping tests |
 | 3 | Copper zones and stronger PCB constraints | Zone connectivity and clearance fixtures; independent CAM review; differential-pair/length rules |
 | 4 | Placement sides, richer footprints and assembly output | Top/bottom assembly examples; vendor footprint checks; paste/assembly layers and part metadata |

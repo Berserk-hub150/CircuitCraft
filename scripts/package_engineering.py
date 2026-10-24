@@ -22,6 +22,9 @@ def package():
     files.extend(ROOT / name for name in required if name.startswith("third-party/"))
     files.extend(ROOT / "third-party" / name for name in ["rust-dependencies.json", "rust-notices.zip"])
     files = sorted(set(files))
+    # Prevent accidental distribution of internal partnership proposals.
+    if any(p.name.upper().endswith('_PROPOSAL.MD') for p in files):
+        raise SystemExit('Internal proposal in release inputs; remove before packaging.')
     hashes = "".join(f"{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.relative_to(ROOT).as_posix()}\n" for p in files)
     DEST.parent.mkdir(exist_ok=True)
     with zipfile.ZipFile(DEST, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as z:

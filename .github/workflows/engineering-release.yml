@@ -1,13 +1,14 @@
-name: Release CircuitCraft 0.3 Windows
+name: Release CircuitCraft Windows
 on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: [docs/RELEASE_NOTES_0.3.0.md]
+    paths:
+      - docs/RELEASE_NOTES_0.3.1.md
 permissions:
   contents: write
 concurrency:
-  group: circuitcraft-0.3-release
+  group: circuitcraft-windows-release
   cancel-in-progress: false
 jobs:
   windows:
@@ -19,7 +20,21 @@ jobs:
           components: rustfmt
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
+      - name: Read release version from Cargo.toml
+        id: version
+        shell: pwsh
+        run: |
+          $version = python -c "import tomllib; from pathlib import Path; print(tomllib.loads(Path('Cargo.toml').read_text())['workspace']['package']['version'])"
+          "version=$version" >> $env:GITHUB_OUTPUT
+      - name: Reject an already published version
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          gh release view "v$version" *> $null
+          if ($LASTEXITCODE -eq 0) { throw "Release v$version already exists; bump the version." }
       - run: cargo fmt --all --check
       - run: cargo test --workspace
       - run: python -m pip install py7zr
@@ -30,18 +45,16 @@ jobs:
       - run: python scripts/package_engineering.py
       - uses: actions/upload-artifact@v4
         with:
-          name: CircuitCraft-0.3.0-Windows-x64
+          name: CircuitCraft-Windows-${{ steps.version.outputs.version }}
           path: |
-            downloads/CircuitCraft-0.3.0-Windows-x64.zip
-            downloads/SHA256SUMS-0.3.0.txt
+            downloads/CircuitCraft-${{ steps.version.outputs.version }}-Windows-x64.zip
+            downloads/SHA256SUMS-${{ steps.version.outputs.version }}.txt
             verification/windows-engine-report.txt
-      - name: Publish tested Windows package
+      - name: Publish verified Windows package
+        shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
-        run: >-
-          gh release create v0.3.0
-          downloads/CircuitCraft-0.3.0-Windows-x64.zip
-          downloads/SHA256SUMS-0.3.0.txt
-          --target "$env:GITHUB_SHA"
-          --title "CircuitCraft 0.3.0 — routing, hierarchy and PCB 3D"
-          --notes-file docs/RELEASE_NOTES_0.3.0.md
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          gh release create "v$version" "downloads/CircuitCraft-$version-Windows-x64.zip" "downloads/SHA256SUMS-$version.txt" --target "$env:GITHUB_SHA" --title "CircuitCraft $version — Windows maintenance release" --notes-file "docs/RELEASE_NOTES_$version.md"
+          if ($LASTEXITCODE -ne 0) { throw "Release publication failed." }
