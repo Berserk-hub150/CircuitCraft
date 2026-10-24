@@ -32,6 +32,10 @@ impl Default for Engineering {
     }
 }
 impl App {
+    #[cfg(test)]
+    pub(super) fn router_running(&self) -> bool {
+        self.engineering.job.is_some()
+    }
     pub(super) fn cancel_router(&self) {
         self.engineering.cancel.store(true, Ordering::Relaxed);
     }
