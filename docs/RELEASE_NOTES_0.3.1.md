@@ -5,6 +5,7 @@ Maintenance release based on the 0.3 application series.
 - Remove the unpublished third-party partnership proposal from current distribution sources.
 - Clarify independent branding and remove third-party references from the logo documentation.
 - Improve Windows release reproducibility, published-tag protection and package safeguards.
+- Preserve the desktop routing test helper in test builds and simplify hierarchy validation as flagged by Clippy.
 - Add a dependency audit, Clippy, Dependabot configuration and a security reporting policy.
 - Retain the 0.3 features: circuit schematic editor, ngspice simulations, two-layer autorouting, hierarchical pages, PCB 3D review and manufacturing exports.
 
